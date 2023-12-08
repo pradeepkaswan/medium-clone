@@ -5,6 +5,7 @@ import {
 	validateEmail,
 	validatePassword,
 } from '../utils/validation.js';
+import { generateUsername } from '../utils/index.js';
 
 export const register = async (req, res) => {
 	const { fullname, email, password } = req.body;
@@ -25,7 +26,7 @@ export const register = async (req, res) => {
 	}
 
 	const hash = await bcrypt.hash(password, 10);
-	const username = email.split('@')[0];
+	const username = await generateUsername(email);
 	const user = new User({
 		personal_info: { fullname, email, password: hash, username },
 	});
@@ -34,6 +35,9 @@ export const register = async (req, res) => {
 		await user.save();
 		return res.status(200).json({ status: 'success' });
 	} catch (err) {
+		if (err.code === 11000) {
+			return res.status(400).json({ error: 'Email already exists' });
+		}
 		return res.status(500).json({ error: err.message });
 	}
 };

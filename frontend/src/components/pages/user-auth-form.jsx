@@ -15,7 +15,7 @@ const UserAuthForm = ({ authType }) => {
             <Input
               name="fullname"
               type="text"
-              placeholder="Name"
+              placeholder="Full Name"
               icon="fi-rr-user"
             />
           ) : (
