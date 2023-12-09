@@ -1,17 +1,58 @@
 import Input from '../ui/input'
-import googleIcon from '../../assets/images/google.png'
+import { googleIcon } from '../../assets/icons.jsx'
 import { Link } from 'react-router-dom'
-import AnimationRevealPage from '../../common/animation-reveal-page'
+import AnimationWrapper from '../../common/animation-wrapper.jsx'
+import { Toaster, toast } from 'react-hot-toast'
+import axios from 'axios'
+import { storeInSession } from '../../common/session.jsx'
+import { useContext } from 'react'
+import { UserContext } from '../../app.jsx'
 
 const UserAuthForm = ({ authType }) => {
+  const {
+    user: { access_token },
+    setUser,
+  } = useContext(UserContext)
+
+  const userAuthThroughServer = (serverRoute, data) => {
+    axios
+      .post(import.meta.env.VITE_SERVER_URL + serverRoute, data)
+      .then(({ data }) => {
+        if (data.status === 'success') {
+          toast.success(data.message)
+          storeInSession('user', JSON.stringify(data))
+          setUser(data)
+        } else {
+          toast.error(data.message)
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    let serverRoute = authType === 'login' ? '/login' : '/register'
+
+    let formData = new FormData(formEl)
+    let data = {}
+    for (let [key, value] of formData.entries()) {
+      data[key] = value
+    }
+
+    userAuthThroughServer(serverRoute, data)
+  }
   return (
-    <AnimationRevealPage key={authType}>
+    <AnimationWrapper keyValue={authType}>
       <section className="min-h-[calc(100vh-80px)] flex items-center justify-center">
-        <form className="w-[80%] max-w-[400px]">
+        <Toaster />
+        <form id="formEl" className="w-[80%] max-w-[400px]">
           <h1 className="text-4xl font-gelasio capitalize text-center mb-24">
-            {authType === 'sign-in' ? 'Welcome back.' : 'Join us.'}
+            {authType === 'login' ? 'Welcome back.' : 'Join us.'}
           </h1>
-          {authType != 'sign-in' ? (
+          {authType !== 'login' ? (
             <Input
               name="fullname"
               type="text"
@@ -21,21 +62,25 @@ const UserAuthForm = ({ authType }) => {
           ) : (
             ''
           )}
+
           <Input
             name="email"
             type="email"
             placeholder="Email"
             icon="fi-sr-at"
           />
+
           <Input
             name="password"
             type="password"
             placeholder="Password"
             icon="fi-rr-lock"
           />
+
           <button
+            onClick={handleSubmit}
             type="submit"
-            className="w-full bg-black text-white rounded-full py-4 mt-8"
+            className="w-full bg-black text-white border border-black rounded-full py-4 mt-8"
           >
             Continue
           </button>
@@ -44,19 +89,19 @@ const UserAuthForm = ({ authType }) => {
             <p className="text-center">or</p>
             <div className="w-full h-[1px] bg-black"></div>
           </div>
-          <button className=" flex items-center justify-center gap-4 w-full outline text-black font-bold rounded-full py-4">
-            <img src={googleIcon} className="w-5" />
+          <button className=" flex items-center justify-center gap-4 w-full border border-gray-500 text-black font-bold rounded-full py-4">
+            {googleIcon}
             Continue with Google
           </button>
           <p className="text-center mt-8">
-            {authType === 'sign-in'
+            {authType === 'login'
               ? "Don't have an account?"
               : 'Already have an account?'}
             <Link
               className="text-black font-bold ml-1"
-              to={authType === 'sign-in' ? '/signup' : '/signin'}
+              to={authType === 'login' ? '/register' : '/login'}
             >
-              {authType === 'sign-in' ? 'Sign up' : 'Sign in'}
+              {authType === 'login' ? 'Sign up' : 'Sign in'}
             </Link>
           </p>
 
@@ -65,7 +110,7 @@ const UserAuthForm = ({ authType }) => {
           </p>
         </form>
       </section>
-    </AnimationRevealPage>
+    </AnimationWrapper>
   )
 }
 

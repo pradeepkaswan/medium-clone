@@ -1,29 +1,36 @@
+import React from 'react'
 import { Route, Routes } from 'react-router'
 import Navbar from './components/navbar.jsx'
 import UserAuthForm from './components/pages/user-auth-form.jsx'
+import { getFromSession } from './common/session.jsx'
+
+export const UserContext = React.createContext({})
 
 const App = () => {
+  const [user, setUser] = React.useState()
+
+  React.useEffect(() => {
+    let userInSession = getFromSession('user')
+
+    if (userInSession) {
+      setUser(JSON.parse(userInSession))
+    } else {
+      setUser({ access_token: null })
+    }
+  }, [])
+
   return (
-    <Routes>
-      <Route path="/" element={<Navbar />}>
-        <Route
-          path="signin"
-          element={
-            <h1>
-              <UserAuthForm authType="sign-in" />
-            </h1>
-          }
-        />
-        <Route
-          path="signup"
-          element={
-            <h1>
-              <UserAuthForm authType="sign-up" />
-            </h1>
-          }
-        />
-      </Route>
-    </Routes>
+    <UserContext.Provider value={{ user, setUser }}>
+      <Routes>
+        <Route path="/" element={<Navbar />}>
+          <Route path="login" element={<UserAuthForm authType="login" />} />
+          <Route
+            path="register"
+            element={<UserAuthForm authType="register" />}
+          />
+        </Route>
+      </Routes>
+    </UserContext.Provider>
   )
 }
 
