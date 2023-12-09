@@ -1,9 +1,21 @@
 import { Link, Outlet } from 'react-router-dom'
 import { useState } from 'react'
-import { mediumLogo, searchIcon, writeBlogIcon } from '../assets/icons.jsx'
+import {
+  NotificationIcon,
+  mediumLogo,
+  searchIcon,
+  writeBlogIcon,
+} from '../assets/icons.jsx'
+import { UserContext } from '../app.jsx'
+import { useContext } from 'react'
 
 const Navbar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false)
+
+  const {
+    user,
+    user: { access_token, profile_img },
+  } = useContext(UserContext)
 
   return (
     <>
@@ -44,18 +56,40 @@ const Navbar = () => {
             <p>Write</p>
           </Link>
 
-          <Link
-            to="/register"
-            className="flex flex-row items-center justify-center px-5 py-2 rounded-full gap-2 text-base bg-[#1a8917] border-transparent text-white"
-          >
-            Sign up
-          </Link>
-          <Link
-            to="/login"
-            className="flex flex-row items-center justify-center px-5 py-2 rounded-full gap-2 text-base hover:bg-zinc-100 border-zinc-600 border-transparent text-black "
-          >
-            Sign in
-          </Link>
+          {access_token ? (
+            <>
+              <Link to="/dashboard/notification">
+                <button className="w-12 h-12 rounded-full bg-grey relative hover:bg-black/10">
+                  {NotificationIcon}
+                </button>
+              </Link>
+
+              <div className="relative">
+                <button className="w-12 h-12 mt-1">
+                  <img
+                    src={profile_img}
+                    alt="profile"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/register"
+                className="flex flex-row items-center justify-center px-5 py-2 rounded-full gap-2 text-base bg-[#1a8917] border-transparent text-white"
+              >
+                Sign up
+              </Link>
+              <Link
+                to="/login"
+                className="flex flex-row items-center justify-center px-5 py-2 rounded-full gap-2 text-base hover:bg-zinc-100 border-zinc-600 border-transparent text-black "
+              >
+                Sign in
+              </Link>
+            </>
+          )}
         </div>
       </nav>
       <Outlet />

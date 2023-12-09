@@ -236,7 +236,7 @@ export const profileIcon = (
   </svg>
 )
 
-export const librabryIcon = (
+export const libraryIcon = (
   <svg
     width="21"
     height="21"

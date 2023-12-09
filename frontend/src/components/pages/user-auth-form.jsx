@@ -1,6 +1,6 @@
 import Input from '../ui/input'
 import { googleIcon } from '../../assets/icons.jsx'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import AnimationWrapper from '../../common/animation-wrapper.jsx'
 import { Toaster, toast } from 'react-hot-toast'
 import axios from 'axios'
@@ -44,7 +44,9 @@ const UserAuthForm = ({ authType }) => {
 
     userAuthThroughServer(serverRoute, data)
   }
-  return (
+  return access_token ? (
+    <Navigate to="/" />
+  ) : (
     <AnimationWrapper keyValue={authType}>
       <section className="min-h-[calc(100vh-80px)] flex items-center justify-center">
         <Toaster />
