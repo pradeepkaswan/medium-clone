@@ -1,8 +1,8 @@
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
     "fullName": "John Doe",
-    "email": "johndoe3@yahoo.com",
+    "email": "johndoe@yahoo.com",
     "password": "abcABC123"
 }

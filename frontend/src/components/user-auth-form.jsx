@@ -1,12 +1,12 @@
-import Input from '../ui/input'
-import { googleIcon } from '../../assets/icons.jsx'
+import Input from './input.jsx'
+import { googleIcon } from '../assets/icons.jsx'
 import { Link, Navigate } from 'react-router-dom'
-import AnimationWrapper from '../../common/animation-wrapper.jsx'
+import AnimationWrapper from '../common/animation-wrapper.jsx'
 import { Toaster, toast } from 'react-hot-toast'
 import axios from 'axios'
-import { storeInSession } from '../../common/session.jsx'
+import { storeInSession } from '../common/session.jsx'
 import { useContext } from 'react'
-import { UserContext } from '../../app.jsx'
+import { UserContext } from '../app.jsx'
 
 const UserAuthForm = ({ authType }) => {
   const {
@@ -18,13 +18,8 @@ const UserAuthForm = ({ authType }) => {
     axios
       .post(import.meta.env.VITE_SERVER_URL + serverRoute, data)
       .then(({ data }) => {
-        if (data.status === 'success') {
-          toast.success(data.message)
-          storeInSession('user', JSON.stringify(data))
-          setUser(data)
-        } else {
-          toast.error(data.message)
-        }
+        storeInSession('user', JSON.stringify(data))
+        setUser(data)
       })
       .catch((err) => {
         toast.error(err.message)

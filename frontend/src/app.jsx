@@ -1,15 +1,15 @@
-import React from 'react'
+import { useState, useEffect, createContext } from 'react'
 import { Route, Routes } from 'react-router'
 import Navbar from './components/navbar.jsx'
-import UserAuthForm from './components/pages/user-auth-form.jsx'
+import UserAuthForm from './components/user-auth-form.jsx'
 import { getFromSession } from './common/session.jsx'
 
-export const UserContext = React.createContext({})
+export const UserContext = createContext({})
 
 const App = () => {
-  const [user, setUser] = React.useState()
+  const [user, setUser] = useState()
 
-  React.useEffect(() => {
+  useEffect(() => {
     let userInSession = getFromSession('user')
 
     if (userInSession) {
