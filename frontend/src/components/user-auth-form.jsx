@@ -1,7 +1,7 @@
 import Input from './input.jsx'
 import { googleIcon } from '../assets/icons.jsx'
 import { Link, Navigate } from 'react-router-dom'
-import AnimationWrapper from '../common/animation-wrapper.jsx'
+import AnimationWrapper from '../common/page-animation.jsx'
 import { Toaster, toast } from 'react-hot-toast'
 import axios from 'axios'
 import { storeInSession } from '../common/session.jsx'

@@ -1,9 +1,20 @@
-import UserNavigationPanel from './user-navigation-panel.jsx'
+import UserNavigationMenu from './user-navigation-menu.jsx'
 import { Link } from 'react-router-dom'
 import { NotificationIcon } from '../assets/icons.jsx'
+import { useState } from 'react'
 
-const UserNavigation = ({ access_token, profile_img }) =>
-  access_token ? (
+const UserNavigation = ({ access_token, profile_img }) => {
+  const [userNavMenu, setUserNavMenu] = useState(false)
+
+  const handleUserNavMenu = () => {
+    setUserNavMenu(!userNavMenu)
+  }
+
+  const handleBlur = () => {
+    setUserNavMenu(false)
+  }
+
+  return access_token ? (
     <>
       <Link to="/dashboard/notification">
         <button className="w-12 h-12 pt-1 relative text-dark-grey opacity-85">
@@ -11,7 +22,7 @@ const UserNavigation = ({ access_token, profile_img }) =>
         </button>
       </Link>
 
-      <div className="relative">
+      <div className="relative" onClick={handleUserNavMenu} onBlur={handleBlur}>
         <button>
           <img
             src={profile_img}
@@ -20,7 +31,7 @@ const UserNavigation = ({ access_token, profile_img }) =>
           />
         </button>
 
-        <UserNavigationPanel />
+        {userNavMenu ? <UserNavigationMenu /> : ''}
       </div>
     </>
   ) : (
@@ -39,5 +50,6 @@ const UserNavigation = ({ access_token, profile_img }) =>
       </Link>
     </>
   )
+}
 
 export default UserNavigation
