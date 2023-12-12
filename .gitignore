@@ -10,8 +10,9 @@ client/logs
 
 # production
 /build
-client/dist
-client/dist-ssr
+/server/config/service-account-key.json
+/client/dist
+/client/dist-ssr
 
 # misc
 .DS_Store
@@ -20,6 +21,8 @@ client/dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+
+/client/.env.production
 
 npm-debug.log*
 yarn-debug.log*
