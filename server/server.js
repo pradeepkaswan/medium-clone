@@ -1,12 +1,19 @@
 import express from 'express';
-import authRoutes from './api/routes/auth.js';
+import authRoutes from './routes/auth.js';
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import admin from 'firebase-admin';
+import serviceAccountKey from './config/service-account-key.json' assert { type: 'json' };
 
 dotenv.config();
 
 const app = express();
+
+// Firebase
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccountKey),
+});
 
 // Middleware
 app.use(express.json());

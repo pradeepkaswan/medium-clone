@@ -11,7 +11,9 @@ const UserNavigation = ({ access_token, profile_img }) => {
   }
 
   const handleBlur = () => {
-    setUserNavMenu(false)
+    setTimeout(() => {
+      setUserNavMenu(false)
+    }, 200)
   }
 
   return access_token ? (

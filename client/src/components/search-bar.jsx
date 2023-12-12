@@ -11,7 +11,7 @@ const SearchBar = () => (
       backgroundColor: 'rgba(250, 250, 250, 1)',
       height: '39px',
       borderRadius: '18px',
-      width: '240px',
+      width: '220px',
       justifyContent: 'center',
     }}
   >

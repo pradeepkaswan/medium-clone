@@ -7,6 +7,7 @@ import axios from 'axios'
 import { storeInSession } from '../common/session.jsx'
 import { useContext } from 'react'
 import { UserContext } from '../app.jsx'
+import { continueWithGoogle } from '../common/firebase.jsx'
 
 const UserAuthForm = ({ authType }) => {
   const {
@@ -39,6 +40,23 @@ const UserAuthForm = ({ authType }) => {
 
     userAuthThroughServer(serverRoute, data)
   }
+
+  const handleGoogleAuth = (e) => {
+    e.preventDefault()
+
+    continueWithGoogle()
+      .then((user) => {
+        let serverRoute = '/google-auth'
+        let data = {
+          access_token: user.accessToken,
+        }
+        userAuthThroughServer(serverRoute, data)
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
+  }
+
   return access_token ? (
     <Navigate to="/" />
   ) : (
@@ -86,7 +104,10 @@ const UserAuthForm = ({ authType }) => {
             <p className="text-center">or</p>
             <div className="w-full h-[1px] bg-black"></div>
           </div>
-          <button className=" flex items-center justify-center gap-4 w-full border border-gray-500 text-black font-bold rounded-full py-4">
+          <button
+            className=" flex items-center justify-center gap-4 w-full border border-gray-500 text-black font-bold rounded-full py-4"
+            onClick={handleGoogleAuth}
+          >
             {googleIcon}
             Continue with Google
           </button>
